@@ -1,12 +1,12 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 // defineProps({
 //   msg: String,
 // })
 
 const count = ref(0)
-const title = ref("Seats")
+const title = ref("Seating Plan")
 const picks = ref(["custom", "predefined"])
 const picked = ref(0)
 const custom_layouts = ref([
@@ -19,43 +19,90 @@ const custom_layouts = ref([
   { name: 'half-circle' },
   { name: 'half-oval' }
 ])
-const selected_layout = ref()
+
+const predefined_layouts = ref([
+  { name: 'bus' },
+  { name: 'conference' },
+  { name: 'cinema' },
+  { name: 'concert' },
+  { name: 'stadium' },
+])
+const selected_layout = ref({})
+const selected_affix = ref(0)
+
+const layouts = computed(() => {
+  return picked.value == 0 ? custom_layouts.value : predefined_layouts.value
+})
 </script>
 
 <template>
   <h1>{{ title }}</h1>
-  <h1>{{ picks[picked] }}</h1>
+  <!-- <h1>{{ layouts }}</h1> -->
 
-  <div class="card">
+  <div class="card" style="display: flex; flex-flow: column; gap: 20px; align-items: center; justify-content: center;">
 
-    <div style="padding: 10px;">
-      <span v-for="(p,index) in picks"> 
-        <input type="radio" v-model="picked" :value="index" :id="'seat_style_'+index"/>
-        <label :for="'seat_style_'+index">
-          {{ p }}
-        </label>
-      </span>
-    </div>
+    
+    <div style="display: flex; flex-flow: column; gap: 20px; align-items: flex-start;">
 
-    <div v-if="picked == 0">
-      <div>
-        No. of rows
-        <input type="number" name="rows" id="no_of_rows">
+      <div style="display: flex; min-width: 100%; text-align: center; align-items: center; justify-content: center;">
+        <span v-for="(p,index) in picks"> 
+          <input type="radio" v-model="picked" :value="index" :id="'seat_style_'+index"/>
+          <label :for="'seat_style_'+index">
+            {{ p }}
+          </label>
+        </span>
       </div>
-      <div>
-        No. of seats
-        <input type="number" name="seats" id="no_of_seats" placeholder="Type desire seat count">
-      </div>
-      <div>
-        Seat layout {{ selected_layout }}
+      
+      <div style="display: flex; min-width: 100%; text-align: left; align-items: center;">
+        <label style="display: flex; min-width: 55%;">Seat layout</label>
         <select v-model="selected_layout">
           <option disabled>Choose Layout</option>
-          <option v-for="custom_layout in custom_layouts" :value="custom_layout">{{custom_layout.name}}</option>
+          <option v-for="layout in layouts" :value="layout">{{ layout.name }}</option>
         </select>
       </div>
+
+      <!-- Total seats -->
+      <!-- <div style="display: flex; min-width: 100%; text-align: left; align-items: center;">
+        <label for="total_seats" style="display: flex; min-width: 55%;">Total seats</label>
+        <input type="number" name="total_seats" id="total_seats" min="1" placeholder="Enter seat count" style="display: flex; min-width: 20%;">
+      </div> -->
+
+      <div style="display: flex; min-width: 100%; text-align: left; align-items: center;">
+        <label for="no_of_rows" style="display: flex; min-width: 55%;">No. of rows</label>
+        <input style="display: flex; min-width: 20%;" type="number" name="rows" id="no_of_rows" min="1"  placeholder="Enter row count">
+      </div>
+
+      <div style="display: flex; min-width: 100%; text-align: left; align-items: center;">
+        <label for="no_of_cols" style="display: flex; min-width: 55%;">No. of columns</label>
+        <input style="display: flex; min-width: 20%;" type="number" name="rows" id="no_of_cols" min="1"  placeholder="Enter col count">
+      </div>
+
+      <div style="display: flex; min-width: 100%; text-align: left; align-items: center;">
+        <label for="row_seats" style="display: flex; min-width: 55%;">Seats per Rows</label>
+        <input type="number" name="seats" id="row_seats" min="1" placeholder="Enter seat count" style="display: flex; min-width: 20%;">
+      </div>
+
+      <!-- prefix/suffix -->
+      <!-- <div style="margin: 10px;">
+        Choose Affix
+        <div style="margin: 10px;">
+          <input type="radio" id="affix_one" :value="0" v-model="selected_affix" />
+          <label for="affix_one">Prefix</label>
+  
+          <input type="radio" id="affix_two" :value="1" v-model="selected_affix" />
+          <label for="affix_two">Suffix</label>
+        </div>
+      </div> -->
     </div>
 
-    <button type="button" @click="count++">count is {{ count }}</button>
+    <div style="margin: 10px;">
+      <button type="button" @click="count++">Generate</button>
+    </div>
+  </div>
+
+  <!-- seats -->
+  <div>
+    
   </div>
 
 </template>
