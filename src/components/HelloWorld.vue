@@ -29,6 +29,9 @@ const predefined_layouts = ref([
 ])
 const selected_layout = ref({})
 const selected_affix = ref(0)
+const rows = ref(0)
+const columns = ref(0)
+
 
 const layouts = computed(() => {
   return picked.value == 0 ? custom_layouts.value : predefined_layouts.value
@@ -67,20 +70,23 @@ const layouts = computed(() => {
         <input type="number" name="total_seats" id="total_seats" min="1" placeholder="Enter seat count" style="display: flex; min-width: 20%;">
       </div> -->
 
+      <!-- rows -->
       <div style="display: flex; min-width: 100%; text-align: left; align-items: center;">
         <label for="no_of_rows" style="display: flex; min-width: 55%;">No. of rows</label>
-        <input style="display: flex; min-width: 20%;" type="number" name="rows" id="no_of_rows" min="1"  placeholder="Enter row count">
+        <input style="display: flex; min-width: 20%;" type="number" name="rows" id="no_of_rows" min="1"  placeholder="Enter row count" v-model="rows">
       </div>
 
+      <!-- cols -->
       <div style="display: flex; min-width: 100%; text-align: left; align-items: center;">
         <label for="no_of_cols" style="display: flex; min-width: 55%;">No. of columns</label>
-        <input style="display: flex; min-width: 20%;" type="number" name="rows" id="no_of_cols" min="1"  placeholder="Enter col count">
+        <input style="display: flex; min-width: 20%;" type="number" name="rows" id="no_of_cols" min="1"  placeholder="Enter col count" v-model="columns">
       </div>
 
-      <div style="display: flex; min-width: 100%; text-align: left; align-items: center;">
+      <!-- Seats per Rows</label -->
+      <!-- <div style="display: flex; min-width: 100%; text-align: left; align-items: center;">
         <label for="row_seats" style="display: flex; min-width: 55%;">Seats per Rows</label>
         <input type="number" name="seats" id="row_seats" min="1" placeholder="Enter seat count" style="display: flex; min-width: 20%;">
-      </div>
+      </div> -->
 
       <!-- prefix/suffix -->
       <!-- <div style="margin: 10px;">
@@ -95,9 +101,34 @@ const layouts = computed(() => {
       </div> -->
     </div>
 
-    <div style="margin: 10px;">
+    <!-- <div style="margin: 10px;">
       <button type="button" @click="count++">Generate</button>
+    </div> -->
+
+    <div>
+      <h2>Enter Seats for each Blocks</h2>
+      <div v-for="row in rows" :key="row" style="display: flex; gap: 5px; padding: 10px;">
+        <div v-for="col in columns" :key="col" style="display: flex; flex-direction: column; border: 2px solid black;">
+
+          <!-- {{ 'Enter Seats for Row ' + row + ' Col ' + col }} -->
+          <!-- Seats per cells -->
+            <input type="number" name="seats" id="row_seats" min="1" :placeholder="'Seats for Block ' + row + col " style="min-width: 30%;">
+        </div>
+      </div>
     </div>
+
+    <div>
+      <h2>Preview</h2>
+      <div v-for="row in rows" :key="row" style="display: flex; gap: 5px; padding: 10px;">
+        <div v-for="col in columns" :key="col" style="display: flex; flex-direction: column; border: 2px solid black;">
+
+          <!-- {{ 'Enter Seats for Row ' + row + ' Col ' + col }} -->
+          <!-- Seats per cells -->
+            <input type="number" name="seats" id="row_seats" min="1" :placeholder="'Seats for Block ' + row + col " style="min-width: 30%;">
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- seats -->
