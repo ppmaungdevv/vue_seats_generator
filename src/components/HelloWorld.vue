@@ -31,6 +31,7 @@ const selected_layout = ref({})
 const selected_affix = ref(0)
 const rows = ref(0)
 const columns = ref(0)
+const show = ref(0)
 
 
 const layouts = computed(() => {
@@ -105,7 +106,7 @@ const layouts = computed(() => {
       <button type="button" @click="count++">Generate</button>
     </div> -->
 
-    <div>
+    <div v-if="show">
       <h2>Enter Seats for each Blocks</h2>
       <div v-for="row in rows" :key="row" style="display: flex; gap: 5px; padding: 10px;">
         <div v-for="col in columns" :key="col" style="display: flex; flex-direction: column; border: 2px solid black;">
@@ -119,15 +120,47 @@ const layouts = computed(() => {
 
     <div>
       <h2>Preview</h2>
-      <div v-for="row in rows" :key="row" style="display: flex; gap: 5px; padding: 10px;">
-        <div v-for="col in columns" :key="col" style="display: flex; flex-direction: column; border: 2px solid black;">
 
-          <!-- {{ 'Enter Seats for Row ' + row + ' Col ' + col }} -->
-          <!-- Seats per cells -->
-            <input type="number" name="seats" id="row_seats" min="1" :placeholder="'Seats for Block ' + row + col " style="min-width: 30%;">
+      <div class="round-test">
+        <div class="round-test-child" v-for="row in rows" :key="row" style="">
+          <div class="round-test-block" v-for="col in columns" :key="col" style="">
+  
+            {{ 'Seats for Block ' + row + col  }}
+            <!-- {{ 'Enter Seats for Row ' + row + ' Col ' + col }} -->
+            <!-- Seats per cells -->
+              <!-- <input type="number" name="seats" id="row_seats" min="1" :placeholder="'Seats for Block ' + row + col " style="min-width: 30%;"> -->
+          </div>
         </div>
       </div>
+
+      
     </div>
+
+    <div style="background-color: #375555; padding: 10px;">
+      <svg width="1000" height="1000">
+        <!-- 
+          cx, cy => position of the circle's center
+          r => the radius of the circle, which mean size
+        -->
+        <circle r="100" cx="150" cy="150" fill="gray" stroke="black" stroke-opacity="0.5" stroke-width="10" />
+        <!-- <circle r="125" cx="125" cy="10" /> -->
+
+        <!-- 
+          rx, ry => border radius
+        -->
+        <rect rx="10" ry="10" x="250" y="250" fill="red" height="100" width="100" stroke="green" stroke-width="10" />
+        <!-- create circle using rectanlgle -->
+        <rect rx="100" ry="100" x="100" y="300" fill="red" height="100" width="100" stroke="green" stroke-width="10" />
+
+        <line x1="300" y1="230" x2="260" y2="25" stroke="blue" stroke-width="10" />
+
+        <polygon fill="white" points="450,450 10,250 200,40 500,500" />
+      </svg>
+
+    </div>
+    <svg>
+      <use href="../assets/Burger.svg#testb"></use>
+    </svg>
 
   </div>
 
@@ -139,4 +172,50 @@ const layouts = computed(() => {
 </template>
 
 <style scoped>
+.round-test {
+  padding: 10px;
+  border: 2px solid cadetblue;
+  border-radius: 9999px;
+}
+.round-test-child {
+  border-radius: 9999px;
+  display: flex;
+  gap: 5px;
+  border: 2px solid yellowgreen;
+}
+
+.round-test-block {
+  display: flex;
+  border-radius: 9999px;
+  flex-direction: column;
+  border: 2px solid blue;
+}
+
+
+/* .round-test > .round-test-block ~ .round-test-block { */
+/* .round-test > .round-test-child > .round-test-block ~ .round-test-block {
+  transform: none;
+  border-bottom-left-radius: 9999px;
+  border-bottom-right-radius: 9999px;
+
+} */
+/* .round-test-child > .round-test-block { */
+/* .round-test > .round-test-block {
+  transform: rotate(-14deg);
+  border-bottom-left-radius: 100%;
+  border-bottom-right-radius: 100%;
+} */
+
+/* .first-child {
+  transform: rotate(-14deg);
+  border-bottom-left-radius: 100%;
+  border-bottom-right-radius: 100%;
+} */
+
+.round-test-block:not(.round-test-block ~ .round-test-block) {
+  transform: rotate(-14deg);
+  border-bottom-left-radius: 100%;
+  border-bottom-right-radius: 100%;
+}
+/* use svg */
 </style>

@@ -1,0 +1,11 @@
+<svg width="120" height="100" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" id="testb">
+  <g id="Burger">
+    <!-- <rect id="burger_top" class="burger-line top" x="20" y="21" width="80" height="6.96" rx="3.48" fill="#413535"/>
+    <rect id="burger_middle" class="burger-line middle" x="20" y="46.52" width="80" height="6.96" rx="3.48" fill="#413535"/>
+    <rect id="burger_bottom" class="burger-line bottom" x="20" y="72.04" width="80" height="6.96" rx="3.48" fill="#413535"/> -->
+
+    <rect id="burger_top" class="burger-line top" x="20" y="21" width="80" height="6.96" rx="3.48"/>
+    <rect id="burger_middle" class="burger-line middle" x="20" y="46.52" width="80" height="6.96" rx="3.48"/>
+    <rect id="burger_bottom" class="burger-line bottom" x="20" y="72.04" width="80" height="6.96" rx="3.48"/>
+  </g>
+</svg>
