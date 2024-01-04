@@ -23,20 +23,18 @@ onMounted(() => {
 </script>
 <template>
   <div>
-    <h4>clock</h4>
-    <!-- <div style="display: flex; justify-content: center; align-items: center; height: 300px; box-sizing: border-box; margin: 0; padding: 0; background-color: #94cdcd;"> -->
-      <div class="clock">
-        <div class="number" :style="'--n:'+i" v-for="(i, index) in 12" :key="index">
-          {{ i }}
-        </div>
-
-        <div class="hour-hand" :style="'transform: translate(-50%) rotate(' + hourDegrees + 'deg);'"></div>
-        <div class="min-hand" :style="'transform: translate(-50%) rotate(' + minuteDegrees + 'deg);'"></div>
-        <div class="sec-hand" :style="'transform: translate(-50%) rotate(' + secondDegrees + 'deg);'"></div>
-
-        <div class="center-dot"></div>
+    <h4>Analog Clock</h4>
+    <div class="clock">
+      <div class="number" :style="'--n:'+i" v-for="(i, index) in 12" :key="index">
+        <p style="margin: 0;">{{ i }}</p>
       </div>
-    <!-- </div> -->
+
+      <div class="hour-hand" :style="'transform: translate(-50%) rotate(' + hourDegrees + 'deg);'"></div>
+      <div class="min-hand" :style="'transform: translate(-50%) rotate(' + minuteDegrees + 'deg);'"></div>
+      <div class="sec-hand" :style="'transform: translate(-50%) rotate(' + secondDegrees + 'deg);'"></div>
+
+      <div class="center-dot"></div>
+    </div>
   </div>
 </template>
 <style scoped>
@@ -44,7 +42,7 @@ onMounted(() => {
   width: 300px;
   height: 300px;
   position: relative;
-  background-color: aliceblue;
+  background-color: rgb(255, 255, 255);
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -57,6 +55,10 @@ onMounted(() => {
   position: absolute;
   text-align: center;
   inset: 10px;
+}
+
+.number :deep(p) {
+  transform: rotate(calc(-30deg * var(--n)));
 }
 
 .center-dot {

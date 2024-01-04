@@ -1,6 +1,11 @@
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, onBeforeMount, computed, watch } from 'vue'
+import { layoutRowStore } from '../stores/LayoutRowStore'
 
+const rowStore = layoutRowStore()
+
+
+const props = defineProps(['foo'])
 const getGridTemplateColumns = (row) => {
   let gtc = ['auto', 'auto', '20%', 'auto', 'auto'];
   if (row.slice(0, 2).some(ele => JSON.stringify(ele) == '{}')) {
@@ -44,11 +49,14 @@ const getSeats = (seat_pos) => {
   }))
 }
 
-watch(total_row, async (new_total_row, old_total_row) => {
+watch(() => rowStore.rows, async (new_total_row, old_total_row) => {
   // setting initial seats
   let seat_pos = 0
   if (old_total_row == 0 && new_total_row > 0) {
-    seats.value.push(getSeats(seat_pos))
+    for (let i = 0; i < new_total_row; i++) {
+      seat_pos = (i * 5)
+      seats.value.push(getSeats(seat_pos))
+    }
   }
 
   // pushing more seats to initial seats
@@ -67,13 +75,12 @@ watch(total_row, async (new_total_row, old_total_row) => {
 })
 
 const toggleSeatRemove = (row, col) => {
-  console.log(row, col)
   if (seats.value[row-1][col-1].removed) {
-    console.log('add')
+    // add
     seats.value[row-1][col-1].seat_name = ((row - 1) * 5) + (col)
     seats.value[row-1][col-1].removed = false
   } else {
-    console.log('remove')
+    // remove seat
     seats.value[row-1][col-1].seat_name = null
     seats.value[row-1][col-1].removed = true
   }
@@ -81,19 +88,16 @@ const toggleSeatRemove = (row, col) => {
 
 const toggleSeatLock = (row, col) => {
   if (seats.value[row-1][col-1].status == 'locked') {
-    console.log('unlocked')
+    // unlocking
     seats.value[row-1][col-1].status = 'available'
   } else {
-    console.log('locked')
+    // locking
     seats.value[row-1][col-1].status = 'locked'
   }
 }
 
-const is_show_rename = ref(false)
-
 const toggleRenameTooltip = (row, col) => {
   seats.value[row-1][col-1].is_show_rename = !seats.value[row-1][col-1].is_show_rename
-  console.log('rename', seats.value[row-1][col-1].seat_name)
 }
 
 const preview = ref(null)
@@ -106,27 +110,28 @@ const leaveTest = (row, col) => {
   preview.value[(row * 5) + col].classList.remove('bg-red')
 }
 
+onBeforeMount(async () => {
+  let seat_pos = 0
+
+  for (let i = 0; i < rowStore.rows; i++) {
+    seat_pos = (i * 5)
+    seats.value.push(getSeats(seat_pos))
+  }
+
+})
+
+
 </script>
 <template>
-  
-  
-
-
-
-  {{ seats.length }}
   <div style="display: flex; margin: auto;">
     <div class="input-group">
-      <div style="display: flex; min-width: 100%; text-align: left; align-items: center; margin-bottom: 25px;">
-        <label for="no_of_rows" style="display: flex; min-width: 55%;">Total rows</label>
-        <input style="display: flex; min-width: 20%;" type="number" name="rows" id="no_of_rows" min="1"  placeholder="Enter row count" v-model="total_row">
-      </div>
       <table>
-        <tr style="padding: 0; margin: 0;" v-for="row in total_row">
+        <tr style="padding: 0; margin: 0;" v-for="row in rowStore.rows">
           <td class="tb-seats" v-for="col in 5" @mouseleave="leaveTest(row - 1 , col - 1)" @mouseover="hoverTest(row - 1, col - 1)">
             <p class="seat-p">
                 <span class="editor">
                   <span class="rename-tooltip" v-if="seats[row-1][col-1].is_show_rename">
-                    <input type="text" v-model="seats[row-1][col-1].seat_name" @keypress.enter="toggleRenameTooltip(row, col)" style="width: 90%; margin: auto; border: solid 1px #94cdcd; border-radius: 5%; background-color: white; padding: 10px;" :name="'seat_name_'+ row + '_' + col" :id="'seat_name_'+ row + '_' + col">
+                    <input type="text" v-model="seats[row-1][col-1].seat_name" @keypress.enter="toggleRenameTooltip(row, col)"  :name="'seat_name_'+ row + '_' + col" :id="'seat_name_'+ row + '_' + col">
                   </span>
                   <span @click="toggleRenameTooltip(row, col)">Rename</span>
                   <span @click="toggleSeatLock(row, col)">Lock</span>
@@ -143,7 +148,7 @@ const leaveTest = (row, col) => {
     <div class="bus-container">
       <table>
         <tr style="padding: 0; margin: 0;" v-for="row in seats">
-          <td ref="preview" class="tb-seats" v-for="col in row">
+          <td ref="preview" class="tb-seats" v-for="col in row" style="width: 20%;">
             <p :class="!col.removed ? 'seat-p' : 'aisle'">
                 <span class="seat-sp">{{ col.seat_name }}</span>
             </p>
