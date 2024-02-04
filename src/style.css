@@ -24,9 +24,7 @@ a:hover {
 
 body {
   margin: 0;
-  min-width: 320px;
   min-height: 100vh;
-  /* background-color: black; */
 }
 
 h1 {
@@ -41,7 +39,6 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -53,14 +50,6 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  /* padding: 2rem; */
-  /* padding-top: 0; */
-  text-align: center;
-}
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -69,7 +58,7 @@ button:focus-visible {
   a:hover {
     color: #747bff;
   }
-  button {
+  /* button {
     background-color: #f9f9f9;
-  }
+  } */
 }
